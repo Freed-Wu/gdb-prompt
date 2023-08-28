@@ -1,0 +1,67 @@
+#!/usr/bin/env -S gdb -x
+# judge if $arg0 match "text:F:B"
+define prompt_is_section
+  set $prompt_is_section = 0
+  set $prompt_number = sizeof($arg0) - 1
+  if $prompt_number >= 4
+    set $prompt_number -= 4
+  end
+  if $arg0[$prompt_number] == ':'
+    set $prompt_is_section = 1
+  end
+end
+
+define set_ps1
+  set $prompt_string_end = "\n(gdb) "
+  set $prompt_sep = ""
+  # $argc cannot be modified
+  # Left operand of assignment is not an lvalue.
+  set $prompt_argc = $argc
+  set $prompt_start = 0
+  if $argc > 0
+    prompt_is_section $arg0
+    if $prompt_is_section == 0
+      set $prompt_string_end = $arg0
+      set $prompt_start = 1
+      set $prompt_argc -= $prompt_start
+    end
+  end
+  if $prompt_argc == 0
+    set $prompt_arg0 = "  \\\\\\\\\\\\\\\\w :7:4"
+    set $prompt_arg1 = " 󰊕 \\\\\\\\f :7:0"
+    set $prompt_arg2 = "  \\\\t :0:3"
+    set $prompt_argc = 3
+  else
+    set $prompt_j = 0
+    while $prompt_j < $prompt_argc
+      eval "set $prompt_arg%d = $arg%d", $prompt_j, $prompt_j + $prompt_start
+      set $prompt_j += 1
+    end
+  end
+  set $prompt_i = 0
+  set $prompt_string = ""
+  while $prompt_i < $prompt_argc
+    eval "set $prompt_arg = $prompt_arg%d", $prompt_i
+    prompt_is_section $prompt_arg
+    if $prompt_is_section == 0
+      set $prompt_sep = $prompt_arg
+    else
+      set $prompt_fg = $prompt_arg[sizeof($prompt_arg) - 4]
+      set $prompt_bg = $prompt_arg[sizeof($prompt_arg) - 2]
+      # cut the string for $prompt_text
+      set $prompt_arg[sizeof($prompt_arg) - 5] = '\0'
+      set $prompt_text = $prompt_arg
+      # first loop
+      if $prompt_i == 0
+        eval "set $prompt_string = \"%s\\e[3%c;4%cm%s\"", $prompt_string, $prompt_fg, $prompt_bg, $prompt_text
+      else
+        eval "set $prompt_string = \"%s\\e[3%c;4%cm%s\\e[3%c;4%cm%s\"", $prompt_string, $prompt_last_bg, $prompt_bg, $prompt_sep, $prompt_fg, $prompt_bg, $prompt_text
+      end
+      set $prompt_last_bg = $prompt_bg
+    end
+    set $prompt_i += 1
+    eval "set extended-prompt %s\\e[0;3%cm%s\\e[0m%s", $prompt_string, $prompt_bg, $prompt_sep, $prompt_string_end
+  end
+end
+
+set_ps1
