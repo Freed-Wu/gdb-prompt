@@ -70,6 +70,8 @@ Or just
 gdb-prompt
 ```
 
+to open a gdb with a powerlevel10k-like prompt.
+
 ## Customize
 
 ```gdb
@@ -91,3 +93,25 @@ set_ps1 [prompt_string] [[text:fg_color_value:bg_color_value] [separator]] ...
   [gdb script doesn't have string concatenate functions](https://sourceware.org/gdb/onlinedocs/gdb/Convenience-Funs.html).
   We must use `eval "set $str = \"%s%s\"", $str1, $str2` to do it, which `eval`
   will convert `"\\\\"` to `"\\"`.
+
+## Alternatives
+
+If you hat gdb script and want a more common language, you can try python:
+
+```sh
+pip install translate-shell
+touch ~/.config/gdb/gdbinit
+install -d ~/.config/gdb/gdb
+python -m translate_shell.tools.generate_prompt \
+    --format='set extended-prompt {text}' \
+    --prompt-string="\n(gdb) " \
+    --section WHITE BLUE ' \w' \
+    --section WHITE BLACK '󰊕 \f' \
+    --section BLACK YELLOW ' \t ' >> ~/.config/gdb/gdb/gdbinit
+echo 'source ~/.config/gdb/gdb/gdbinit' >> ~/.config/gdb/gdbinit
+```
+
+It will give you same appearance as this project.
+[This tool](https://github.com/Freed-Wu/translate-shell) is originally
+written for [lftp](https://github.com/lavv17/lftp/discussions/711), but in fact
+it can be helpful for many other programs.
