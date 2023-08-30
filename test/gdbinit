@@ -10,7 +10,7 @@ if $prompt_is_section != 0
   set $error += 1
 end
 set_ps1 "\\n$ " "\\\\\\\\\\\\\\\\w:7:4" "" "\\\\\\\\f:7:0" "" "\\\\t:0:3" ""
-if $_streq($prompt_string, "\033[37;44m\\w\033[34;40m\033[37;40m\\f\033[30;43m\033[30;43m\\t") != 1
+if $_streq($prompt_string, "\033[37;44m\\w\033[34;40m\033[37m\\f\033[30;43m\033[30m\\t") != 1
   set $error += 1
 end
 quit $error

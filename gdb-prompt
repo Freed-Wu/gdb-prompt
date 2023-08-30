@@ -55,7 +55,7 @@ define set_ps1
       if $prompt_i == 0
         eval "set $prompt_string = \"%s\\e[3%c;4%cm%s\"", $prompt_string, $prompt_fg, $prompt_bg, $prompt_text
       else
-        eval "set $prompt_string = \"%s\\e[3%c;4%cm%s\\e[3%c;4%cm%s\"", $prompt_string, $prompt_last_bg, $prompt_bg, $prompt_sep, $prompt_fg, $prompt_bg, $prompt_text
+        eval "set $prompt_string = \"%s\\e[3%c;4%cm%s\\e[3%cm%s\"", $prompt_string, $prompt_last_bg, $prompt_bg, $prompt_sep, $prompt_fg, $prompt_text
       end
       set $prompt_last_bg = $prompt_bg
     end
