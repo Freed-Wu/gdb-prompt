@@ -27,19 +27,24 @@
 [![github/repo-size](https://shields.io/github/repo-size/Freed-Wu/gdb-prompt)](https://github.com/Freed-Wu/gdb-prompt)
 [![github/v](https://shields.io/github/v/release/Freed-Wu/gdb-prompt)](https://github.com/Freed-Wu/gdb-prompt)
 
-A [powerlevel10k](https://github.com/romkatv/powerlevel10k)-like prompt for
-[gdb](https://sourceware.org/gdb)/[cgdb](https://github.com/cgdb/cgdb).
-Pure gdb script without dependency on
-[the python port of gdb](https://sourceware.org/gdb/current/onlinedocs/gdb.html/Python.html)!
+This project provides:
+
+- A GDB plugin for
+  [powerlevel10k](https://github.com/romkatv/powerlevel10k)-like prompt
+  written in pure gdb script without dependency on
+  [the python port of gdb](https://sourceware.org/gdb/current/onlinedocs/gdb.html/Python.html)!
 
 ![screenshot](https://github.com/gnu-octave/prompt/assets/32936898/4dd002fd-9259-4d44-a854-5e132c32b4db)
+
+- A WakaTime plugin to statistic how much time you debug code in
+  [gdb](https://sourceware.org/gdb)/[cgdb](https://github.com/cgdb/cgdb).
 
 ## Install
 
 ### [AUR](https://aur.archlinux.org/packages/gdb-prompt-git)
 
 ```sh
-yay -S gdb-prompt-git
+paru -S gdb-prompt-git
 ```
 
 ### [NUR](https://nur.nix-community.org/repos/freed-wu)
@@ -50,27 +55,45 @@ nix-env -iA nixos.nur.repos.Freed-Wu.gdb-prompt
 
 ## Usage
 
-`~/.config/gdb/gdbinit`:
+Add the following code to `~/.config/gdb/gdbinit`:
+
+### Prompt
 
 ```gdb
 source /the/path/of/this/directory/gdb-prompt
-# GNU/Linux
-source /usr/bin/gdb-prompt
-# NixOS
-source /run/current-system/sw/bin/gdb-prompt
-# Nix
-source ~/.local/state/nix/profile/bin/gdb-prompt
-# Old Nix
-source ~/.nix-profile/bin/gdb-prompt
 ```
 
-Or just
+Or just `gdb-prompt` (Yes, this file has a shebang) to open a gdb with
+a powerlevel10k-like prompt.
 
-```sh
-gdb-prompt
+### Wakatime
+
+1. Your `gdb` must be compiled with [python
+   port](https://sourceware.org/gdb/current/onlinedocs/gdb.html/Python.html)
+2. Depends on
+   [repl-python-wakatime](https://github.com/wakatime/repl-python-wakatime)
+
+```gdb
+define hook-stop
+  source /the/path/of/this/directory/gdb-hook.py
+end
 ```
 
-to open a gdb with a powerlevel10k-like prompt.
+It will send wakatime heartbeat every `step`, `next`, ...
+If you want to only send wakatime heartbeat every `step`, just
+
+```gdb
+define hook-step
+  source /the/path/of/this/directory/gdb-hook.py
+end
+```
+
+See [GDB Hooks](https://sourceware.org/gdb/current/onlinedocs/gdb.html/Hooks.html)
+to know more.
+
+Use environment variables `HOOK_NAME=hook1:hook2` to defines which hook will be
+used. Available hooks can be seen
+[here](https://github.com/wakatime/repl-python-wakatime#configure).
 
 ## Customize
 
