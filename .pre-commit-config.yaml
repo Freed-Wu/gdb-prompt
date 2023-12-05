@@ -45,6 +45,9 @@ repos:
     rev: 3.0.0
     hooks:
       - id: check-mailmap
+      - id: shellcheck
+        exclude_types:
+          - zsh
   - repo: https://github.com/rhysd/actionlint
     rev: v1.6.26
     hooks:
@@ -72,6 +75,10 @@ repos:
       - id: markdownlint-cli2
         additional_dependencies:
           - markdown-it-texmath
+  - repo: https://github.com/scop/pre-commit-shfmt
+    rev: v3.7.0-4
+    hooks:
+      - id: shfmt
   - repo: https://github.com/psf/black
     rev: 23.11.0
     hooks:
@@ -101,4 +108,5 @@ repos:
 
 ci:
   skip:
+    - shellcheck
     - pyright
