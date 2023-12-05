@@ -4,7 +4,7 @@ r"""GDB hook
 import os
 import sys
 
-hook_names = os.getenv("HOOK_NAME", "wakatime")
+hook_names = os.getenv("HOOK_NAMES", "wakatime")
 
 prefixs = [
     "/usr",

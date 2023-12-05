@@ -91,7 +91,7 @@ end
 See [GDB Hooks](https://sourceware.org/gdb/current/onlinedocs/gdb.html/Hooks.html)
 to know more.
 
-Use environment variables `HOOK_NAME=hook1:hook2` to defines which hook will be
+Use environment variables `HOOK_NAMES=hook1:hook2` to defines which hook will be
 used. Available hooks can be seen
 [here](https://github.com/wakatime/repl-python-wakatime#configure).
 
