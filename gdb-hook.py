@@ -31,4 +31,4 @@ for hook_name in hook_names.split(":"):
         from repl_python_wakatime.hooks.codestats import codestats_hook as hook
     else:
         raise NotImplementedError
-    hook(plugin="repl-gdb-wakatime", language="gdb")
+    hook(plugin="repl-gdb-wakatime", language="gdb", category="debugging")
